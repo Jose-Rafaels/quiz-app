@@ -1,0 +1,38 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Nilai Kuis yang Anda Buat</h1>
+
+  {% if user_attempts %}
+  <!-- Tabel Nilai Kuis -->
+  <div class="table-responsive bg-light">
+    <table class="table table-bordered table-striped table-hover">
+      <thead class="table-primary">
+        <tr>
+          <th>Nama Pengguna</th>
+          <th>Judul Kuis</th>
+          <th>Skor</th>
+          <th>Tanggal Selesai</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for attempt in user_attempts %}
+        <tr class="{% if not attempt.end_time %}table-danger{% endif %}">
+          <td>{{ attempt.user.username }}</td>
+          <td>{{ attempt.quiz.title }}</td>
+          <td>{{ attempt.score }}%</td>
+          <td>{{ attempt.start_time|date:"d M Y H:i" }}</td>
+          <td>{% if not attempt.end_time %}-{% else %} Selesai {% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <!-- Pesan Jika Tidak Ada Nilai Kuis -->
+  <div class="alert alert-warning text-center">
+    Tidak ada pengguna yang telah menyelesaikan kuis yang Anda buat.
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

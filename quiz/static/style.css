@@ -1,0 +1,16 @@
+body,
+.navbar-brand,
+.nav-link,
+.bg-navy {
+  background-color: #1e3a5f;
+  color: white;
+}
+.bg-light {
+  color: black;
+}
+.nav-item {
+  color: white!;
+}
+* :root {
+  --bs-primary: #1e3a5f; /* Override primary color to navy blue */
+}

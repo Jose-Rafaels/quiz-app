@@ -1,0 +1,42 @@
+{% extends 'base.html' %} {% block content %}
+<!-- Hero Section -->
+<section class="hero text-center">
+  <div class="container">
+    <h1>Selamat Datang di Platform Kuis!</h1>
+    <p class="lead">
+      Tempat terbaik untuk mengasah pengetahuanmu dengan kuis interaktif.
+    </p>
+    <a href="{% url 'create_quiz' %}" class="btn btn-primary btn-lg"
+      >Buat Kuis</a
+    >
+    <a href="{% url 'dashboard' %}" class="btn btn-outline-light btn-lg"
+      >Lihat Semua Kuis</a
+    >
+  </div>
+</section>
+
+<!-- Featured Quizzes -->
+<section class="my-5">
+  <div class="container">
+    <h2 class="text-center mb-4">Kuis Pilihan</h2>
+    <div class="row g-4">
+      {% for quiz in quizzes %}
+      <div class="col-md-4">
+        <div class="card bg-light">
+          <div class="card-body">
+            <h5 class="card-title">{{ quiz.title }}</h5>
+            <p class="card-text">{{ quiz.question_set.count }} Pertanyaan</p>
+            <a
+              href="{% url 'start_quiz_attempt' quiz.pk %}"
+              class="btn btn-primary"
+              >Ikuti Kuis</a
+            >
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

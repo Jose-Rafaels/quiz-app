@@ -1,0 +1,149 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-5">
+  <!-- Navigasi Pertanyaan -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">title</h3>
+    </div>
+    <div class="card-body">
+      <!-- Tombol untuk setiap nomor pertanyaan -->
+      <div class="d-flex flex-wrap gap-2">
+        {% for status in question_status %}
+        <button
+          class="btn question-nav {% if status.question.id == current_question.id %}btn-secondary {% elif status.is_answered %}btn-success{% else %}btn-outline-secondary{% endif %}"
+          data-url="{% url 'quiz_question' attempt_id %}?question={{ forloop.counter }}"
+        >
+          {{ forloop.counter }}
+        </button>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Pertanyaan Saat Ini -->
+  <div class="card mb-4">
+    <div class="card-header bg-secondary text-white">
+      <h1 class="mb-0">{{ current_question.question_text }}</h1>
+    </div>
+    <div class="card-body bg-light">
+      <!-- Form Pertanyaan -->
+      <form id="question-form">
+        {% csrf_token %}
+        <input type="hidden" name="attempt_id" value="{{ attempt_id }}" />
+        <input
+          type="hidden"
+          name="question_id"
+          value="{{ current_question.id }}"
+        />
+
+        <!-- Pilihan Jawaban -->
+        <div class="form-group">
+          {% for choice in current_question.choice_set.all %}
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="choice_id"
+              id="choice_{{ choice.id }}"
+              value="{{ choice.id }}"
+            />
+            <label class="form-check-label" for="choice_{{ choice.id }}">
+              {{ choice.choice_text }}
+            </label>
+          </div>
+          {% endfor %}
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Tombol Submit -->
+  <div class="d-flex justify-content-end">
+    <button id="finish-quiz" class="btn btn-danger">Selesai Kuis</button>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    const savedChoice = "{{ saved_choice }}";
+
+    // Menandai radio button yang sesuai dengan jawaban yang tersimpan
+    if (savedChoice) {
+      $(`input[name="choice_id"][value="${savedChoice}"]`).prop(
+        "checked",
+        true
+      );
+    }
+    // Simpan jawaban saat pengguna memilih pilihan jawaban
+    $('input[name="choice_id"]').on("change", function () {
+      const attempt_id = $('input[name="attempt_id"]').val();
+      const question_id = $('input[name="question_id"]').val();
+      const choice_id = $('input[name="choice_id"]:checked').val();
+
+      if (choice_id) {
+        $.ajax({
+          url: "{% url 'save_answer' %}",
+          method: "POST",
+          data: {
+            attempt_id: attempt_id,
+            question_id: question_id,
+            choice_id: choice_id,
+            csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+          },
+          success: function (response) {
+            console.log(response.message);
+          },
+          error: function () {
+            console.log("Error saving answer.");
+          },
+        });
+      }
+    });
+
+    // Navigasi ke pertanyaan lain berdasarkan tombol nomor pertanyaan
+    $(".question-nav").on("click", function (e) {
+      e.preventDefault();
+      window.location.href = $(this).data("url");
+    });
+
+    // Tombol untuk menyelesaikan kuis
+    $("#finish-quiz").on("click", function (e) {
+      e.preventDefault();
+      const attempt_id = $('input[name="attempt_id"]').val();
+      const question_id = $('input[name="question_id"]').val();
+      const choice_id = $('input[name="choice_id"]:checked').val();
+
+      // Simpan jawaban terakhir
+      $.ajax({
+        url: "{% url 'save_answer' %}",
+        method: "POST",
+        data: {
+          attempt_id: attempt_id,
+          question_id: question_id,
+          choice_id: choice_id,
+          csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+        },
+        success: function (response) {
+          // Setelah jawaban terakhir disimpan, arahkan ke finish_quiz untuk menghitung skor
+          $.ajax({
+            url: "{% url 'finish_quiz' attempt_id %}",
+            method: "POST",
+            data: {
+              csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+            },
+            success: function () {
+              window.location.href = "{% url 'quiz_results' %}"; // Redirect ke halaman hasil kuis
+            },
+            error: function () {
+              console.log("Error finishing quiz.");
+            },
+          });
+        },
+        error: function () {
+          console.log("Error saving last answer.");
+        },
+      });
+    });
+  });
+</script>
+{% endblock %}

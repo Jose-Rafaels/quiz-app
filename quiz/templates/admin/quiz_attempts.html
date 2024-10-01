@@ -1,0 +1,15 @@
+{% extends '../base.html' %} {% block content %}
+<h2>All Quiz Attempts</h2>
+
+{% if attempts.exists %}
+<ul>
+  {% for attempt in attempts %}
+  <li {% if attempt.end_time is null %} class="bg-warning" {% endif %}>
+    {{ attempt.user }} - {{ attempt.quiz.title }} - Score : {{ attempt.score }}
+    (Start Time at: {{ attempt.start_time }})
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No quiz attempts found.</p>
+{% endif %} {% endblock %}

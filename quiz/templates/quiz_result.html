@@ -1,0 +1,47 @@
+{% extends 'base.html' %} {% block content %}
+<div class="row">
+  <div class="container bg-light mt-5 p-5">
+    <!-- Judul Halaman -->
+    <h2 class="text-center mb-4">Hasil Kuis: {{ result.quiz_title }}</h2>
+
+    <!-- Pesan Error Jika Ada -->
+    {% if error_message %}
+    <div class="alert alert-danger text-center" role="alert">
+      {{ error_message }}
+    </div>
+    {% endif %}
+
+    <!-- Kartu Hasil Kuis -->
+    <div class="card mx-auto" style="max-width: 600px">
+      <div class="card-body">
+        <h4 class="card-title text-center mb-4">Detail Hasil Kuis</h4>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <strong>Skor:</strong>
+            <span class="float-end">{{ result.score }}%</span>
+          </li>
+          <li class="list-group-item">
+            <strong>Waktu Mulai:</strong>
+            <span class="float-end">{{ result.start_time }}</span>
+          </li>
+          <li class="list-group-item">
+            <strong>Waktu Selesai:</strong>
+            <span class="float-end">{{ result.end_time }}</span>
+          </li>
+          <li class="list-group-item">
+            <strong>Pembuat Kuis:</strong>
+            <span class="float-end">{{ result.quiz_creator }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Tombol Kembali ke Hasil -->
+    <div class="text-center mt-4">
+      <a href="{% url 'quiz_results' %}" class="btn btn-primary"
+        >Kembali ke Hasil</a
+      >
+    </div>
+  </div>
+</div>
+{% endblock %}

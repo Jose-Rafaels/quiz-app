@@ -1,0 +1,12 @@
+{% extends 'base.html' %} {% block content %}
+<h1>Mulai Kuis: {{ quiz.title }}</h1>
+<p>{{ quiz.description }}</p>
+
+<!-- Tombol untuk memulai kuis -->
+<form method="POST">
+  {% csrf_token %}
+  <button type="submit">Mulai Kuis</button>
+</form>
+
+<a href="{% url 'dashboard' %}">Kembali ke Daftar Kuis</a>
+{% endblock %}

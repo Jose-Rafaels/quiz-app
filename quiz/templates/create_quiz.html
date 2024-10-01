@@ -1,0 +1,125 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Buat Kuis Baru</h1>
+
+  <form method="POST">
+    {% csrf_token %}
+
+    <!-- Judul Kuis -->
+    <div class="mb-3">
+      <label for="title" class="form-label">Judul Kuis:</label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        class="form-control"
+        placeholder="Masukkan judul kuis"
+        required
+      />
+    </div>
+
+    <!-- Deskripsi Kuis -->
+    <div class="mb-4">
+      <label for="description" class="form-label">Deskripsi Kuis:</label>
+      <textarea
+        id="description"
+        name="description"
+        class="form-control"
+        rows="3"
+        placeholder="Masukkan deskripsi kuis"
+        required
+      ></textarea>
+    </div>
+
+    <!-- Bagian untuk menambahkan pertanyaan dan pilihan jawaban -->
+    <div id="questions-container">
+      <h2 class="mb-4">Pertanyaan</h2>
+    </div>
+
+    <button
+      type="button"
+      id="add-question"
+      class="btn btn-outline-primary mb-4"
+    >
+      Tambahkan Pertanyaan
+    </button>
+
+    <!-- Tombol Simpan -->
+    <div class="text-center">
+      <button type="submit" class="btn btn-success btn-lg">Simpan Kuis</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  $(document).ready(function () {
+    let questionCount = 0;
+
+    // Fungsi untuk menambahkan pertanyaan dan pilihan jawaban
+    function addQuestion() {
+      const questionHTML = `
+        <div class="card mb-4 question-block" id="question-${questionCount}">
+          <div class="card-header bg-secondary text-white">
+            <h4>Pertanyaan ${questionCount + 1}</h4>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="questions" class="form-label">Pertanyaan:</label>
+              <input type="text" name="questions[]" class="form-control" placeholder="Masukkan pertanyaan" required>
+            </div>
+            <div class="choices-container mb-3">
+              <h5 class="mb-3">Pilihan Jawaban</h5>
+              <div class="choice-list">
+                <div class="input-group mb-2">
+                  <div class="input-group-text">
+                    <input type="radio" name="correct_choice[${questionCount}]" value="0" required>
+                  </div>
+                  <input type="text" name="choices[${questionCount}][]" class="form-control" placeholder="Masukkan pilihan jawaban" required>
+                </div>
+                <div class="input-group mb-2">
+                  <div class="input-group-text">
+                    <input type="radio" name="correct_choice[${questionCount}]" value="1" required>
+                  </div>
+                  <input type="text" name="choices[${questionCount}][]" class="form-control" placeholder="Masukkan pilihan jawaban" required>
+                </div>
+              </div>
+              <button type="button" class="btn btn-outline-secondary add-choice" data-question="${questionCount}">
+                Tambahkan Pilihan Jawaban
+              </button>
+            </div>
+          </div>
+        </div>`;
+
+      $("#questions-container").append(questionHTML);
+      questionCount++;
+    }
+
+    // Tambahkan pertanyaan baru ketika tombol "Tambahkan Pertanyaan" ditekan
+    $("#add-question").on("click", function () {
+      addQuestion();
+    });
+
+    // Tambahkan pilihan jawaban tambahan ketika tombol "Tambahkan Pilihan Jawaban" ditekan
+    $(document).on("click", ".add-choice", function () {
+      const questionIndex = $(this).data("question");
+      const choiceCount = $(
+        `#question-${questionIndex} .choice-list .input-group`
+      ).length;
+
+      const choiceHTML = `
+        <div class="input-group mb-2">
+          <div class="input-group-text">
+            <input type="radio" name="correct_choice[${questionIndex}]" value="${choiceCount}" required>
+          </div>
+          <input type="text" name="choices[${questionIndex}][]" class="form-control" placeholder="Masukkan pilihan jawaban" required>
+        </div>`;
+
+      $(`#question-${questionIndex} .choice-list`).append(choiceHTML);
+    });
+
+    // Tambahkan pertanyaan pertama ketika halaman dimuat
+    addQuestion();
+  });
+</script>
+
+{% endblock %}

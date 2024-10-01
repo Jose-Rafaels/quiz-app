@@ -1,0 +1,51 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container mt-5 p-5 bg-light">
+  <h2 class="text-center mb-4">Kuis yang Sudah Diselesaikan</h2>
+
+  <!-- Tabel Kuis yang Sudah Diselesaikan -->
+  {% if completed_quizzes.exists %}
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>Judul Kuis</th>
+          <th>Skor</th>
+          <th>Waktu Mulai</th>
+          <th>Waktu Selesai</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for quiz_attempt in completed_quizzes %}
+        <tr>
+          <td>{{ quiz_attempt.quiz.title }}</td>
+          <td>{{ quiz_attempt.score }}%</td>
+          <td>{{ quiz_attempt.start_time }}</td>
+          <td>{{ quiz_attempt.end_time }}</td>
+          <td>
+            <a
+              href="{% url 'quiz_result' quiz_attempt.id %}"
+              class="btn btn-sm btn-outline-info"
+              >Lihat</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="alert alert-warning text-center" role="alert">
+    Anda belum menyelesaikan kuis apapun.
+  </div>
+  {% endif %}
+
+  <!-- Tombol Kembali ke Dashboard -->
+  <div class="text-center mt-4">
+    <a href="{% url 'dashboard' %}" class="btn btn-primary"
+      >Kembali ke Dashboard</a
+    >
+  </div>
+</div>
+{% endblock %}

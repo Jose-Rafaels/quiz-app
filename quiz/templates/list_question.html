@@ -1,0 +1,31 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Semua Pertanyaan untuk "{{ quiz.title }}"</h1>
+
+  <!-- List Pertanyaan -->
+  <div class="list-group bg-light">
+    {% for qa in quiz_answers %}
+    <div class="list-group-item">
+      <h5 class="mb-3">
+        Pertanyaan {{ forloop.counter }}: {{ qa.question.question_text }}
+      </h5>
+
+      <!-- Daftar Jawaban -->
+      <ul class="list-group list-group-flush">
+        {% for answer in qa.answers %}
+        <li class="list-group-item">
+          {{ answer.choice_text }} {% if answer.is_correct %}
+          <span class="badge bg-success">Benar</span>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% empty %}
+    <div class="alert alert-warning text-center" role="alert">
+      Tidak ada pertanyaan untuk kuis ini.
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

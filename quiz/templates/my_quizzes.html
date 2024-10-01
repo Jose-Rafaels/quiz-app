@@ -1,0 +1,32 @@
+<!-- my_quizzes.html -->
+{% extends 'base.html' %} {% block content %}
+<h2>My Created Quizzes</h2>
+
+{% if quizzes.exists %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Created At</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for quiz in quizzes %}
+    <tr>
+      <td>{{ quiz.title }}</td>
+      <td>{{ quiz.description }}</td>
+      <td>{{ quiz.created_at }}</td>
+      <td>
+        <a href="{% url 'quiz_detail' quiz.id %}" class="btn btn-primary"
+          >View</a
+        >
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>You have not created any quizzes yet.</p>
+{% endif %} {% endblock %}

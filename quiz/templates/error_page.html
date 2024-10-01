@@ -1,0 +1,8 @@
+<!-- error_page.html -->
+{% extends 'base.html' %} {% block content %}
+<div class="bg-light m-5 p-5">
+  <h2>Error</h2>
+  <p>{{ message }}</p>
+  <a href="{% url 'dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
+  {% endblock %}
+</div>

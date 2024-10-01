@@ -1,0 +1,61 @@
+{% extends 'base.html' %} {% block content %}
+<div class="mt-5">
+  <!-- Admin Dashboard -->
+  {% if is_admin %}
+  <h1 class="text-center mb-4">Admin Dashboard</h1>
+  <p class="text-center">
+    Selamat datang, admin! Anda memiliki akses ke manajemen kuis.
+  </p>
+
+  <!-- Tombol Buat Kuis Baru -->
+  <div class="text-center mb-4">
+    <a href="{% url 'create_quiz' %}" class="btn btn-success">Buat Kuis Baru</a>
+  </div>
+
+  {% else %}
+
+  <h2 class="text-center mb-4">Daftar Kuis</h2>
+  {% endif %}
+  <div class="container py-5">
+    <!-- List of Quizzes -->
+
+    <div class="row g-4">
+      {% for quiz in quizzes %}
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body bg-light">
+            <h5 class="card-title">{{ quiz.title }}</h5>
+            <p class="card-text">{{ quiz.description }}</p>
+            <p class="card-text">
+              <strong>Jumlah Pertanyaan:</strong> {{ quiz.total_questions }}
+            </p>
+            {% if is_admin %}
+            <!-- Tombol untuk Admin -->
+            <a
+              href="{% url 'list_question' quiz.pk %}"
+              class="btn btn-primary w-100"
+              >Lihat Kuis</a
+            >
+            {% else %}
+            <!-- Tombol untuk User -->
+            <a
+              href="{% url 'start_quiz_attempt' quiz.pk %}"
+              class="btn btn-success w-100"
+              >Mulai Kuis</a
+            >
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12">
+        <p class="alert alert-warning text-center">
+          Tidak ada kuis yang tersedia.
+        </p>
+      </div>
+    </div>
+
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

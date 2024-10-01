@@ -1,0 +1,63 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 bg-navy">
+      <div class="card bg-navy">
+        <div class="card-header text-white text-center">
+          <h2>Login</h2>
+        </div>
+        <div class="card-body">
+          <!-- Form Login -->
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="username" class="form-label text-white"
+                >Username</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                name="username"
+                id="username"
+                placeholder="Masukkan username Anda"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label text-white"
+                >Password</label
+              >
+              <input
+                type="password"
+                class="form-control"
+                name="password"
+                id="password"
+                placeholder="Masukkan password Anda"
+                required
+              />
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-success">Login</button>
+            </div>
+
+            <!-- Menampilkan Error Jika Ada -->
+            {% if form.errors %}
+            <div class="alert alert-danger mt-3" role="alert">
+              Username atau password tidak valid.
+            </div>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+
+      <!-- Link untuk Register -->
+      <div class="text-center mt-3">
+        <p class="text-white">
+          Belum punya akun? <a href="{% url 'register' %}">Daftar disini</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
