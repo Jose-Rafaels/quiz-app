@@ -1,9 +1,9 @@
 {% extends 'base.html' %} {% block content %}
 <div class="container mt-5">
   <div class="row justify-content-center">
-    <div class="col-md-6 bg-navy">
-      <div class="card bg-navy">
-        <div class="card-header text-white text-center">
+    <div class="col-md-6 bg-light">
+      <div class="card my-2 bg-light">
+        <div class="card-header text-dark text-center">
           <h2>Login</h2>
         </div>
         <div class="card-body">
@@ -20,8 +20,7 @@
                 name="username"
                 id="username"
                 placeholder="Masukkan username Anda"
-                required
-              />
+                required />
             </div>
             <div class="mb-3">
               <label for="password" class="form-label text-white"
@@ -33,8 +32,7 @@
                 name="password"
                 id="password"
                 placeholder="Masukkan password Anda"
-                required
-              />
+                required />
             </div>
             <div class="d-grid">
               <button type="submit" class="btn btn-success">Login</button>
@@ -52,7 +50,7 @@
 
       <!-- Link untuk Register -->
       <div class="text-center mt-3">
-        <p class="text-white">
+        <p class="text-dark">
           Belum punya akun? <a href="{% url 'register' %}">Daftar disini</a>
         </p>
       </div>

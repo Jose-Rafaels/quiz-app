@@ -13,10 +13,10 @@ SECRET_KEY = os.getenv(
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
 # ALLOWED HOSTS
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
+# ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
 
 # TRUSTED DOMAINS
-TRUSTED_DOMAINS = os.getenv("TRUSTED_DOMAINS", "").split(",")
+# TRUSTED_DOMAINS = os.getenv("TRUSTED_DOMAINS", "").split(",")
 
 # Application definition
 
